@@ -5,6 +5,11 @@ if errorlevel 1 exit 1
 findstr /c:"--with-toolset=clang" config.ts.bat >nul 2>&1
 if errorlevel 1 goto msvc
 
+if defined PHP_CLANG_RESOURCE_DIR (
+    set "CFLAGS=%CFLAGS% -resource-dir="%PHP_CLANG_RESOURCE_DIR%""
+    set "LDFLAGS=%LDFLAGS% /libpath:"%PHP_CLANG_RESOURCE_DIR%\lib\windows""
+)
+
 rem clang-cl PGO: --enable-pgi/--with-pgo add the profile flags via configure, phpsdk_pgo only runs the training workloads.
 rem the profiles go into BUILD_DIR, which nmake clean-pgo preserves like the pgd files of the Visual Studio flow.
 set "PGO_DIR=%CD%\..\obj\Release_TS"
